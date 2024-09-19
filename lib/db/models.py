@@ -17,3 +17,14 @@ class User(Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     workouts = relationship("Workout", back_populates="user")
+    
+class Workout(Base):
+    __tablename__ = 'workouts'
+    id = Column(Integer, primary_key=True)
+    workout_type = Column(String, nullable=False)
+    distance = Column(Float)  # Distance in kilometers
+    steps = Column(Integer)  # Number of steps
+    calories = Column(Float, nullable=False)  # Calories burned
+    date = Column(DateTime, default=datetime.utcnow)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="workouts")    
