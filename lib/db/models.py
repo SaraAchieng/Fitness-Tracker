@@ -41,12 +41,26 @@
      
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Boolean, Table, DateTime, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 
 engine = create_engine('sqlite:///fitness_database.db')
 Base = declarative_base()
+
+# Association table for many-to-many relationship between User and Workout
+user_workout_association = Table(
+    'user_workout_association', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('workout_id', Integer, ForeignKey('workouts.id'))
+)
+
+# Association table for many-to-many relationship between User and Goal
+user_goal_association = Table(
+    'user_goal_association', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('goal_id', Integer, ForeignKey('goals.id'))
+)    
 
 class User(Base):
     __tablename__ = 'users'
