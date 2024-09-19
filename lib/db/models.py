@@ -3,7 +3,7 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -27,4 +27,14 @@ class Workout(Base):
     calories = Column(Float, nullable=False)  # Calories burned
     date = Column(DateTime, default=datetime.utcnow)
     user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User", back_populates="workouts")    
+    user = relationship("User", back_populates="workouts")   
+    
+class Goal(Base):
+    __tablename__ = 'goals'
+    id = Column(Integer, primary_key=True)
+    goal_type = Column(String, nullable=False)  # Type of goal (steps, calories, distance)
+    target_value = Column(Float, nullable=False)  # Target value for the goal (e.g., 10000 steps)
+    is_achieved = Column(Boolean, default=False)  # Whether the goal is achieved or not
+    user_id = Column(Integer, ForeignKey('users.id'))  # Link to the user
+    user = relationship("User", back_populates="goals")
+     
