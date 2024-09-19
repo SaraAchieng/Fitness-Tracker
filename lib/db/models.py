@@ -42,7 +42,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 
 engine = create_engine('sqlite:///fitness_database.db')
@@ -53,8 +53,8 @@ class User(Base):
     id = Column(Integer(), primary_key=True)
     name = Column(String())
     email = Column(String(), unique=True)
-    workouts = relationship("Workout", back_populates="user")
-    goals = relationship("Goal", back_populates="user")  
+    workouts = relationship("Workout", backref=backref("user"))
+    goals = relationship("Goal", backref=backref("user"))  
 
 class Workout(Base):
     __tablename__ = 'workouts'
@@ -65,7 +65,7 @@ class Workout(Base):
     calories = Column(Float())  # Calories burned
     date = Column(DateTime(), default=datetime.now())
     user_id = Column(Integer(), ForeignKey('users.id'))
-    user = relationship("User", back_populates="workouts")
+    # user = relationship("User", backref=backref("workouts"))
 
 class Goal(Base):
     __tablename__ = 'goals'
@@ -74,7 +74,7 @@ class Goal(Base):
     target_value = Column(Float())  # Target value for the goal (e.g., 10000 steps)
     is_achieved = Column(Boolean(), default=False)  # Whether the goal is achieved or not
     user_id = Column(Integer(), ForeignKey('users.id'))  # Link to the user
-    user = relationship("User", back_populates="goals")  # Relationship back to User
+    # user = relationship("User", backref=backref("goals"))  # Relationship back to User
      
      
 if __name__ == "__main__":
