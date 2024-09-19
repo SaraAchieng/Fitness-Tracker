@@ -68,7 +68,9 @@ class User(Base):
     name = Column(String())
     email = Column(String(), unique=True)
     workouts = relationship("Workout", backref=backref("user"))
-    goals = relationship("Goal", backref=backref("user"))  
+    goals = relationship("Goal", backref=backref("user")) 
+    workouts = relationship("Workout", secondary=user_workout_association, back_populates="users")
+    goals = relationship("Goal", secondary=user_goal_association, back_populates="users") 
 
 class Workout(Base):
     __tablename__ = 'workouts'
@@ -80,6 +82,7 @@ class Workout(Base):
     date = Column(DateTime(), default=datetime.now())
     user_id = Column(Integer(), ForeignKey('users.id'))
     # user = relationship("User", backref=backref("workouts"))
+    users = relationship("User", secondary=user_workout_association, back_populates="workouts")
 
 class Goal(Base):
     __tablename__ = 'goals'
@@ -89,6 +92,7 @@ class Goal(Base):
     is_achieved = Column(Boolean(), default=False)  # Whether the goal is achieved or not
     user_id = Column(Integer(), ForeignKey('users.id'))  # Link to the user
     # user = relationship("User", backref=backref("goals"))  # Relationship back to User
+    users = relationship("User", secondary=user_goal_association, back_populates="goals")
      
      
 if __name__ == "__main__":
