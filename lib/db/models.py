@@ -129,13 +129,31 @@ session = Session()
     
     
     
+# def create_user():
+#     name = input(Fore.GREEN + "Enter name: " + Style.RESET_ALL)
+#     email = input("Enter email: ")
+#     user = User(name=name, email=email)
+#     session.add(user)
+#     session.commit()
+#     print("User created.")
+
+
 def create_user():
+    # Prompt for user details
     name = input(Fore.GREEN + "Enter name: " + Style.RESET_ALL)
     email = input("Enter email: ")
+    
+    # Create a new User instance
     user = User(name=name, email=email)
     session.add(user)
     session.commit()
-    print("User created.")
+    
+    # Prepare data for tabulate
+    user_data = [[user.id, user.name, user.email]]
+    
+    print(Fore.CYAN + "\nUser Created:\n" + Style.RESET_ALL)
+    print()
+    print(tabulate(user_data, headers=["ID", "Name", "Email"], tablefmt="fancy_grid"))
 
 def update_user():
     user_id = int(input("Enter user ID to update: "))
