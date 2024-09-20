@@ -173,13 +173,39 @@ def update_user():
 
 
 
+# def delete_user():
+#     user_id = int(input("Enter user ID to delete: "))
+#     user = session.query(User).filter_by(id=user_id).first()
+#     if user:
+#         session.delete(user)
+#         session.commit()
+#         print("User deleted.")
+#     else:
+#         print("User not found.")
+
+
 def delete_user():
+    # Prompt for the user ID to delete
     user_id = int(input("Enter user ID to delete: "))
+    
+    # Query the User with the given ID
     user = session.query(User).filter_by(id=user_id).first()
+    
     if user:
-        session.delete(user)
-        session.commit()
-        print("User deleted.")
+        # Prepare data for tabulate to display the user being deleted
+        user_data = [[user.id, user.name, user.email]]
+        
+        print(Fore.CYAN + "\nUser to be Deleted:\n" + Style.RESET_ALL)
+        print(tabulate(user_data, headers=["ID", "Name", "Email"], tablefmt="fancy_grid"))
+        
+        # Confirm deletion
+        confirm = input(Fore.RED + "Are you sure you want to delete this user? (yes/no): " + Style.RESET_ALL)
+        if confirm.lower() == 'yes':
+            session.delete(user)
+            session.commit()
+            print("User deleted.")
+        else:
+            print("Deletion canceled.")
     else:
         print("User not found.")
 
@@ -250,11 +276,26 @@ def delete_workout():
     else:
         print("Workout not found.")
 
+# def display_all_workouts():
+#     workouts = session.query(Workout).all()
+#     if workouts:
+#         for workout in workouts:
+#             print(f"ID: {workout.id}, Type: {workout.workout_type}, Distance: {workout.distance} km, Steps: {workout.steps}, Calories: {workout.calories}")
+#     else:
+#         print("No workouts found.")
+
 def display_all_workouts():
     workouts = session.query(Workout).all()
+    
     if workouts:
-        for workout in workouts:
-            print(f"ID: {workout.id}, Type: {workout.workout_type}, Distance: {workout.distance} km, Steps: {workout.steps}, Calories: {workout.calories}")
+        # Prepare data for tabulate
+        workout_data = [
+            [workout.id, workout.workout_type, workout.distance, workout.steps, workout.calories]
+            for workout in workouts
+        ]
+        
+        print("\nAll Workouts:\n")
+        print(tabulate(workout_data, headers=["ID", "Type", "Distance (km)", "Steps", "Calories"], tablefmt="fancy_grid"))
     else:
         print("No workouts found.")
 
