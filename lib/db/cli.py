@@ -11,7 +11,7 @@ from models import (create_user, update_user, delete_user, display_all_users, fi
 
 
 def print_menu():
-    print("1. See Users Workout")
+    print("1. Create User")
     print("2. Update User")
     print("3. Delete User")
     print("4. Display All Users")
