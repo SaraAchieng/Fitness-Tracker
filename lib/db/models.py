@@ -150,6 +150,11 @@ def update_user():
     else:
         print("User not found.")
 
+
+
+
+
+
 def delete_user():
     user_id = int(input("Enter user ID to delete: "))
     user = session.query(User).filter_by(id=user_id).first()

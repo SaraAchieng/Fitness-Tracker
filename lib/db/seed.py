@@ -93,9 +93,9 @@ if __name__ == "__main__":
     Base.metadata.create_all(engine)
     
     # Add users, workouts, and goals
-    users = create_users(6)  # Create 10 users
-    create_workouts(users, 10)  # Create 20 workouts
-    create_goals(users, 7)  # Create 15 goals
+    users = create_users(6)  
+    create_workouts(users, 10)  
+    create_goals(users, 7)  
     
     print("Data seeded successfully!")
 
