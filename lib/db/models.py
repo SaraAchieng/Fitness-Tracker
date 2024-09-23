@@ -12,19 +12,19 @@ init()
 
 Base = declarative_base()
 
-# # Association table for many-to-many relationship between User and Workout
-# user_workout_association = Table(
-#     'user_workout_association', Base.metadata,
-#     Column('user_id', Integer, ForeignKey('users.id')),
-#     Column('workout_id', Integer, ForeignKey('workouts.id'))
-# )
+# Association table for many-to-many relationship between User and Workout
+user_workout_association = Table(
+    'user_workout_association', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('workout_id', Integer, ForeignKey('workouts.id'))
+)
 
-# # Association table for many-to-many relationship between User and Goal
-# user_goal_association = Table(
-#     'user_goal_association', Base.metadata,
-#     Column('user_id', Integer, ForeignKey('users.id')),
-#     Column('goal_id', Integer, ForeignKey('goals.id'))
-# )    
+# Association table for many-to-many relationship between User and Goal
+user_goal_association = Table(
+    'user_goal_association', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('goal_id', Integer, ForeignKey('goals.id'))
+)    
 
 class User(Base):
     __tablename__ = 'users'
@@ -33,8 +33,6 @@ class User(Base):
     email = Column(String(), nullable=False, unique=True)
     workouts = relationship("Workout", backref=backref("user"))
     goals = relationship("Goal", backref=backref("user")) 
-    # workouts = relationship("Workout", secondary=user_workout_association, back_populates="users")
-    # goals = relationship("Goal", secondary=user_goal_association, back_populates="users") 
     
     def __repr__(self):
         return f"{self.id} {self.name} {self.email}"    
@@ -48,8 +46,7 @@ class Workout(Base):
     calories = Column(Float())  # Calories burned
     date = Column(DateTime(), default=datetime.now())
     user_id = Column(Integer(), ForeignKey('users.id'))
-    # user = relationship("User", backref=backref("workouts"))
-    # users = relationship("User", secondary=user_workout_association, back_populates="workouts")
+
     
     def __repr__(self):
         return f"{self.id} {self.workout_type} {self.distance} {self.steps} {self.calories} {self.date}"  
@@ -63,8 +60,7 @@ class Goal(Base):
     target_value = Column(Float())  # Target value for the goal (e.g., 10000 steps)
     is_achieved = Column(Boolean(), default=False)  # Whether the goal is achieved or not
     user_id = Column(Integer(), ForeignKey('users.id'))  # Link to the user
-    # user = relationship("User", backref=backref("goals"))  # Relationship back to User
-    # users = relationship("User", secondary=user_goal_association, back_populates="goals")
+   
     
     def __repr__(self):
         return f"{self.id} {self.goal_type} {self.target_value} {self.is_achieved}"
