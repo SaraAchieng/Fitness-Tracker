@@ -9,7 +9,7 @@ from colorama import Fore, Style, init
 init()
 
 
-
+# Base class for SQLAlchemy models
 Base = declarative_base()
 
 # Association table for many-to-many relationship between User and Workout
@@ -24,8 +24,9 @@ user_goal_association = Table(
     'user_goal_association', Base.metadata,
     Column('user_id', Integer, ForeignKey('users.id')),
     Column('goal_id', Integer, ForeignKey('goals.id'))
-)    
-
+)   
+  
+# User model representing a fitness app user
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer(), primary_key=True)
@@ -35,8 +36,10 @@ class User(Base):
     goals = relationship("Goal", backref=backref("user")) 
     
     def __repr__(self):
-        return f"{self.id} {self.name} {self.email}"    
-
+        return f"{self.id} {self.name} {self.email}" 
+    
+       
+# Workout model representing a user's fitness activity
 class Workout(Base):
     __tablename__ = 'workouts'
     id = Column(Integer, primary_key=True)
@@ -52,7 +55,7 @@ class Workout(Base):
         return f"{self.id} {self.workout_type} {self.distance} {self.steps} {self.calories} {self.date}"  
 
 
-
+# Goal model representing a fitness goal for a user
 class Goal(Base):
     __tablename__ = 'goals'
     id = Column(Integer(), primary_key=True)
@@ -76,7 +79,7 @@ engine = create_engine('sqlite:///fitness_database.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
-
+# Function to create a new user
 def create_user():
     # Prompt for user details
     name = input(Fore.GREEN + "Enter name: " + Style.RESET_ALL)
@@ -93,7 +96,9 @@ def create_user():
     print(Fore.CYAN + "\nUser Created:\n" + Style.RESET_ALL)
     print()
     print(tabulate(user_data, headers=["ID", "Name", "Email"], tablefmt="fancy_grid"))
-
+    
+    
+# Function to update a user's information
 def update_user():
     user_id = int(input("Enter user ID to update: "))
     user = session.query(User).filter_by(id=user_id).first()
@@ -107,7 +112,7 @@ def update_user():
     else:
         print("User not found.")
 
-
+# Function to delete a user
 def delete_user():
     # Prompt for the user ID to delete
     user_id = int(input("Enter user ID to delete: "))
@@ -132,7 +137,9 @@ def delete_user():
             print("Deletion canceled.")
     else:
         print("User not found.")
-
+        
+        
+# Function to display all users in the database
 def display_all_users():
     users = session.query(User).all()
     if users:
@@ -140,7 +147,8 @@ def display_all_users():
             print(f"ID: {user.id}, Name: {user.name}, Email: {user.email}")
     else:
         print("No users found.")
-
+        
+# Function to find a user by their ID
 def find_user_by_id():
     user_id = int(input("Enter user ID: "))
     user = session.query(User).filter_by(id=user_id).first()
@@ -148,7 +156,8 @@ def find_user_by_id():
         print(f"ID: {user.id}, Name: {user.name}, Email: {user.email}")
     else:
         print("User not found.")
-
+        
+# Function to find a user by their name
 def find_user_by_name():
     name = input("Enter user name: ")
     user = session.query(User).filter_by(name=name).first()
